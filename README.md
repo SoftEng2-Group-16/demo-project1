@@ -10,10 +10,10 @@ The following material references should contains all the instrections to instal
 
 
 ### Some references of the technologies used:
+- general: https://elite.polito.it/teaching/01txy-wa1-ah/schedule
+- react: https://polito-wa1-aw1-2023.github.io/materials/slide/3-01-React-intro.pdf
+- express: https://polito-wa1-aw1-2023.github.io/materials/slide/4-01-Express.pdf
 
-- https://polito-wa1-aw1-2023.github.io/materials/slide/3-01-React-intro.pdf
-- https://polito-wa1-aw1-2023.github.io/materials/slide/4-01-Express.pdf
-- https://polito-wa1-aw1-2023.github.io/materials/slide/4-02-API.pdf
 
 ### Some references to other projects based on the same technologies
 
