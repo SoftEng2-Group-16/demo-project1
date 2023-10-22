@@ -10,10 +10,12 @@ and can be tested with its relative counterpart tool https://www.browserling.com
 |---        |---          |---|
 |  GGeppetto |  password1 |  officer |
 |  LVenigni |  password2 | admin  |
-|  FGAtto    |  password3 | employee  |
+|  FGatto    |  password3 | employee  |
 
 ## Database Structure
 
 TODO
 
-Note by LFMV: I removed the constraint NOTNULL on the field Counter (External Key) since only the 'employee' user are bound with counters
+*If you need a tool to explore the DB, you can try 'DB Browser for SQLITE' for Windows Desktop*
+
+**Note by LFMV: I removed the constraint NOTNULL on the field Counter (External Key) since only the 'employee' user are bound with counters**
