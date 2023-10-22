@@ -10,6 +10,7 @@ import API from './API';
 import { LoginForm } from './components/AuthComponents';
 
 function App() {
+
   const [loggedIn, setLoggedIn] = useState(false);
   const [message, setMessage] = useState('');
   const [user, setUser] = useState([])
@@ -18,21 +19,21 @@ function App() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if(loggedIn){
-      try{
-      const user = await API.getUserInfo(); // we have the user info here 
-      if(user){
-      setUser({
-        id: user.id,
-        username: user.username,
-      })
-    
-      setLoggedIn(true);
-    };
-  }catch{ (err) =>{return null;}}
-  
-  }
-  }
+      if (loggedIn) {
+        try {
+          const user = await API.getUserInfo(); // we have the user info here 
+          if (user) {
+            setUser({
+              id: user.id,
+              username: user.username,
+            })
+
+            setLoggedIn(true);
+          };
+        } catch { (err) => { return null; } }
+
+      }
+    }
     checkAuth();
   }, [loggedIn]);
 
@@ -40,9 +41,9 @@ function App() {
     try {
       const user = await API.logIn(credentials);
       setLoggedIn(true);
-      setMessage({msg: `Welcome, ${user.username}!`, type: 'success'});
-    }catch(err) {
-      setMessage({msg: err, type: 'danger'});
+      setMessage({ msg: `Welcome, ${user.username}!`, type: 'success' });
+    } catch (err) {
+      setMessage({ msg: err, type: 'danger' });
     }
   };
 
@@ -53,7 +54,7 @@ function App() {
     setMessage('');
   };
 
-   //the react container uses the outlet feature
+  //the react container uses the outlet feature
 
   return (
     <BrowserRouter>
@@ -62,7 +63,7 @@ function App() {
           element={
             <>
               <NavHeader loggedIn={loggedIn} user={user} handleLogout={handleLogout} />
-              <Container fluid  className="mt-3 text-center">
+              <Container fluid className="mt-3 text-center">
                 {message && (
                   <Row>
                     <Alert variant={message.type} onClose={() => setMessage('')} dismissible>
@@ -70,7 +71,7 @@ function App() {
                     </Alert>
                   </Row>
                 )}
-                <Outlet /> 
+                <Outlet />
               </Container>
             </>
           }
@@ -83,6 +84,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-  }
-  
-  export default App;
+}
+
+export default App;
