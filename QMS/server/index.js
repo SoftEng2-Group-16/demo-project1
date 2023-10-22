@@ -45,7 +45,8 @@ passport.serializeUser(function (user, cb) {
   cb(null, user);
 });
 
-passport.deserializeUser(function (user, cb) { // this user is id + email + name
+passport.deserializeUser(function (user, cb) { // this user all the data found in the select user in the db, needs to be cleaned up
+   console.log(user)
   return cb(null, user);
   // if needed, we can do extra check here (e.g., double check that the user is still in the database, etc.)
 });
