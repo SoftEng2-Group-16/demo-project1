@@ -112,3 +112,4 @@ app.delete('/api/sessions/current', isLoggedIn, (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+

@@ -1,0 +1,13 @@
+
+### REST extension to manual test the server
+GET http://localhost:3001/api/sessions/current HTTP/1.1
+
+### 
+
+POST http://localhost:3001/api/sessions/ HTTP/1.1
+content-type: application/json
+
+{
+    "username": "sample",
+    "password": "whatever"
+}
