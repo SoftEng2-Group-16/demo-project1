@@ -48,8 +48,6 @@ const logOut = async () => {
 
 //CUSTOMER
 async function getAllServices() {
-  return getJson(fetch(SERVER_URL + '/services'))
-  
   return getJson(fetch(SERVER_URL + '/api/services'))
     .then(json => {
       return json.map((service) => new Service(service.id, service.type,service.description,service.serviveTime))
