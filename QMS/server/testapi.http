@@ -25,3 +25,6 @@ content-type: application/json
     "ts":"23-10-2023 15:00:00",
     "status":"pending"
 }
+
+###
+DELETE http://localhost:3001/api/tickets/6

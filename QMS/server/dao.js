@@ -2,6 +2,7 @@ const crypto = require('crypto');
 
 const db = require('./db');
 const { Service, Counter, Ticket } = require("./model");
+const { check } = require('express-validator');
 
 //all the code here needs to be modified according to the new db
 
@@ -106,6 +107,21 @@ exports.createTicket = (serviceType,ts,status) => {
         reject(err);
       }
       resolve(this.changes);
+    });
+  });
+}
+
+
+
+exports.deleteTicket = (ticketId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'DELETE FROM tickets where id=?' ;  
+    db.run(sql, [ticketId], function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(this.changes);  // return the number of affected rows
     });
   });
 }
