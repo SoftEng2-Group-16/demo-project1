@@ -1,22 +1,33 @@
-/* eslint-disable no-unused-vars */
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Alert } from 'react-bootstrap';
 import './App.css'
 import NavHeader from './components/NavbarComponents';
-import NotFound from './components/NotFoundComponent';
+import { NotFoundLayout, LoadingLayout } from './components/PageLayout';
 
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import MessageContext from './messageCtx.jsx';
 import API from './API';
 import { LoginForm } from './components/AuthComponents';
+import Home from './components/Home';
+
 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [message, setMessage] = useState('');
   const [user, setUser] = useState([])
   const [update, setUpdate] = useState(false); // unused, can be used to trigger an update
 
+  //the error message
+  const [message, setMessage] = useState('');
+  // If an error occurs, the error message will be shown in a toast.
+  const handleErrors = (err) => {
+    let msg = '';
+    if (err.error) msg = err.error;
+    else msg = "Unknown Error";
+    setMessage(msg);
+  }
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -59,6 +70,7 @@ function App() {
 
   return (
     <BrowserRouter>
+     <MessageContext.Provider value={{ handleErrors}}>
       <Routes>
         <Route
           element={
@@ -77,12 +89,13 @@ function App() {
             </>
           }
         >
-          <Route path="/" element={<Navigate to="/" />} ></Route>
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Home />} ></Route>
+          <Route path="*" element={<NotFoundLayout  />} />
           <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <LoginForm login={handleLogin} />}
           />
         </Route>
       </Routes>
+      </MessageContext.Provider>
     </BrowserRouter>
   );
 }
