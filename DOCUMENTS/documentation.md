@@ -35,11 +35,11 @@ This is **WRONG** and needs to be fixed, the serialization should not invlude se
 COUNTERS
 | id  | services  | service_time
 |---        |---  |---
-1     | {[shipping,booking]} | t1
-2     | {[account]}   | t2
-3     | {[shipping,account]}  |t3
+1     | shipping,booking | t1
+2     | account   | t2
+3     | shipping,account |t3
 
-The services field is a json for a vector of services as string
+The services field is a string, we need a function to transform the json to a string 
 Service_time is the avarage time for the service, to use in the formula
 
 SERVICES
@@ -54,9 +54,9 @@ TICKETS
 |---        |--- | --- |--- |--- |--- |---
 
 
-status is pending if there is no counter available for the requested service and so the customer is i the queue.
-
-An update is done once the customer has been served updating the ts_finished and putting the status to Closed
+status is pending if there is no counter available for the requested service and so the customer is in the queue, is also pending during the time he is being served.
+A first update is done when the system assign the counter and the employeeid.
+A final update is done once the customer has been served updating the ts_finished and putting the status to Closed
 
 
 *If you need a tool to explore the DB, you can try 'DB Browser for SQLITE' for Windows Desktop*
