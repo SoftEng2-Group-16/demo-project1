@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 const db = require('./db');
-const {Service,Counter,Ticket} =require("./model");
+const { Service, Counter, Ticket } = require("./model");
 
 //all the code here needs to be modified according to the new db
 
@@ -18,7 +18,7 @@ const {Service,Counter,Ticket} =require("./model");
 // USER SECTION
 
 
-exports.getUser= (username, password) => { // this is used by passport see line 32 in index.js
+exports.getUser = (username, password) => { // this is used by passport see line 32 in index.js
   return new Promise((resolve, reject) => {
     const sql = 'SELECT * FROM users WHERE username = ?';
 
@@ -47,51 +47,65 @@ exports.getUser= (username, password) => { // this is used by passport see line 
 // FOR SINGLE FETCH
 
 exports.getUserByUsername = (username) => {
-    return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM users WHERE username = ?`;
-      db.get(query, [username], (error, row) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(row);
-        }
-      });
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * FROM users WHERE username = ?`;
+    db.get(query, [username], (error, row) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(row);
+      }
     });
+  });
 }
 
 // FOR SINGLE FETCH
 
 exports.getUsers = () => {
-    return new Promise((resolve, reject) => {
-      const sql = 'SELECT username FROM users';
-      db.all(sql, [], (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows);
-        }
-      });
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT username FROM users';
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
     });
-  }
-  
+  });
+}
+
 
 
 //API SECTION
 
-  exports.getServices =()=>{
-    return new Promise((resolve, reject) => {
-      let sql="SELECT * FROM services";
-      db.all(sql, [], (err, rows) => {
-        if (err) { reject(err); }
-        //if not find anything
-        if (rows.length == 0) {
-          resolve({ error: 'services not found' });
-        }
-        else {
-          const services = rows.map((row) => new Service(row.id, row.type, row.description, row.serviceTime)); //check if name works or if we need to put service_time like in the DB field
-          resolve(services);
-        }
-      });
-
+exports.getServices = () => {
+  return new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM services";
+    db.all(sql, [], (err, rows) => {
+      if (err) { reject(err); }
+      //if not find anything
+      if (rows.length == 0) {
+        resolve({ error: 'services not found' });
+      }
+      else {
+        const services = rows.map((row) => new Service(row.id, row.type, row.description, row.service_time)); 
+        resolve(services);
+      }
     });
-  };
+
+  });
+};
+
+
+exports.createTicket = (serviceType) => {
+  return new Promise((resolve, reject) => {
+    const sql ="INSERT INTO tickets (counterid, timestamp_created, timestamp_finished, service_type, employeeid, status) values (?,?,?,?,?,?)";
+
+    db.run(sql, [], function (err) {
+      if (err) {
+        reject(err);
+      }
+      resolve(this.changes);
+    });
+  });
+}
