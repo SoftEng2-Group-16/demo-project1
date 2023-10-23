@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Alert } from 'react-bootstrap';
 import './App.css'
@@ -29,7 +30,7 @@ function App() {
             })
 
             setLoggedIn(true);
-          };
+          }
         } catch { (err) => { return null; } }
 
       }

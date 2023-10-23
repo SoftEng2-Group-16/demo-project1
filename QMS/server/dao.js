@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 const db = require('./db');
+const {Service,Counter,Ticket} =require("./model");
 
 //all the code here needs to be modified according to the new db
 
@@ -73,3 +74,24 @@ exports.getUsers = () => {
     });
   }
   
+
+
+//API SECTION
+
+  exports.getServices =()=>{
+    return new Promise((resolve, reject) => {
+      let sql="SELECT * FROM services";
+      db.all(sql, [], (err, rows) => {
+        if (err) { reject(err); }
+        //if not find anything
+        if (rows.length == 0) {
+          resolve({ error: 'services not found' });
+        }
+        else {
+          const services = rows.map((row) => new Service(row.id, row.type,row.description));
+          resolve(services);
+        }
+      });
+
+    });
+  };

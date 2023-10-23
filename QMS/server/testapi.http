@@ -11,3 +11,8 @@ content-type: application/json
     "username": "sample",
     "password": "whatever"
 }
+
+
+###
+GET http://localhost:3001/api/services
+

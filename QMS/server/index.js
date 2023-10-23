@@ -109,6 +109,28 @@ app.delete('/api/sessions/current', isLoggedIn, (req, res) => {
   });
 });
 
+
+
+/***
+ * Customer APIs
+ */
+
+//GET /api/services
+app.get("/api/services",async(req, res) => {
+  try {
+    const services = await dao.getServices();
+    if (services.error) {
+      return res.status(404).json(services);  //{ error: 'No plane found'})
+    }
+    else
+      return res.status(200).json(services);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
+
+
 // activate the server
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
