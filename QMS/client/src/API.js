@@ -47,8 +47,8 @@ const logOut = async () => {
 
 
 //CUSTOMER
-
 async function getAllServices() {
+  return getJson(fetch(SERVER_URL + '/services'))
   
   return getJson(fetch(SERVER_URL + '/api/services'))
     .then(json => {

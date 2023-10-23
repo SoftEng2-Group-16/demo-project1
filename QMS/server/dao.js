@@ -111,7 +111,18 @@ exports.createTicket = (serviceType,ts,status) => {
   });
 }
 
+exports.closeTicket = (ticketId,ts) => {
+  return new Promise((resolve,reject) => {
+    const sql="UPDATE tickets SET status=?, timestamp_finished=? WHERE id=?"
 
+    db.run(sql,["closed",ts,ticketId], function(err) {
+      if(err) {
+        reject(err);
+      }
+      resolve(this.changes);
+    })
+  })
+}
 
 exports.deleteTicket = (ticketId) => {
   return new Promise((resolve, reject) => {

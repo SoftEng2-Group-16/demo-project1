@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const dayjs = require('dayjs');
 
 // init express
 const app = new express();
@@ -129,7 +130,7 @@ app.get("/api/services", async (req, res) => {
   try {
     const services = await dao.getServices();
     if (services.error) {
-      return res.status(404).json(services);  //{ error: 'No plane found'})
+      return res.status(404).json(services);  //{ error: 'No services found'})
     }
     else
       return res.status(200).json(services);
@@ -138,6 +139,20 @@ app.get("/api/services", async (req, res) => {
   }
 });
 
+//When employee finishes serving tickets, updates the status from pending to closed and adds the timestamp field
+//PUT /api/closeticket/:ticketId
+//the id of the ticket is passed as a parameter in the url 
+app.put("/api/closeticket/:ticketId", async (req, res) => {
+  const id = req.params.ticketId;
+  const ts = dayjs().format("DD/MM/YYYY HH:mm:ss")
+
+  try {
+    const changes = await dao.closeTicket(id,ts);
+    return res.status(200).json(changes);
+  } catch(err) {
+    return res.status(500).json(err.message);
+  }
+})
 
 
 //Customer choose a service type-> create new ticket
