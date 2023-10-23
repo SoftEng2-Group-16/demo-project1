@@ -32,7 +32,31 @@ This is **WRONG** and needs to be fixed, the serialization should not invlude se
 
 ## Database Structure
 
-TODO
+COUNTERS
+| id  | services
+|---        |---
+1     | {[shipping,booking]}
+2     | {[account]}
+3     | {[shipping,account]}
+
+The services field is a json for a vector of services as string
+
+SERVICES
+| id  | type   | desciption
+|---        |--- | ---
+1     | account | info
+2     | shipping | info
+3     | booking | info
+
+TICKETS
+| id |counterId | ts_created | ts_finished | service_type | employeeid |status
+|---        |--- | --- |--- |--- |--- |---
+
+
+status is pending if there is no counter available for the requested service and so the customer is i the queue.
+
+An update is done once the customer has been served updating the ts_finished and putting the status to Closed
+
 
 *If you need a tool to explore the DB, you can try 'DB Browser for SQLITE' for Windows Desktop*
 
