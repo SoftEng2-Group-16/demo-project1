@@ -16,3 +16,12 @@ content-type: application/json
 ###
 GET http://localhost:3001/api/services
 
+###
+POST http://localhost:3001/api/ticket 
+content-type: application/json
+
+{
+    "serviceType": "shipping",
+    "ts":"23-10-2023 15:00:00",
+    "status":"pending"
+}

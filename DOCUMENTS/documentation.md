@@ -33,13 +33,14 @@ This is **WRONG** and needs to be fixed, the serialization should not invlude se
 ## Database Structure
 
 COUNTERS
-| id  | services
-|---        |---
-1     | {[shipping,booking]}
-2     | {[account]}
-3     | {[shipping,account]}
+| id  | services  | service_time
+|---        |---  |---
+1     | {[shipping,booking]} | t1
+2     | {[account]}   | t2
+3     | {[shipping,account]}  |t3
 
 The services field is a json for a vector of services as string
+Service_time is the avarage time for the service, to use in the formula
 
 SERVICES
 | id  | type   | desciption

@@ -97,11 +97,11 @@ exports.getServices = () => {
 };
 
 
-exports.createTicket = (serviceType) => {
+exports.createTicket = (serviceType,ts,status) => {
   return new Promise((resolve, reject) => {
     const sql ="INSERT INTO tickets (counterid, timestamp_created, timestamp_finished, service_type, employeeid, status) values (?,?,?,?,?,?)";
 
-    db.run(sql, [], function (err) {
+    db.run(sql, [null,ts,null,serviceType,null,status], function (err) {
       if (err) {
         reject(err);
       }
@@ -109,3 +109,4 @@ exports.createTicket = (serviceType) => {
     });
   });
 }
+
