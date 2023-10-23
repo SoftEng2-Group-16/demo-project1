@@ -88,7 +88,7 @@ exports.getUsers = () => {
           resolve({ error: 'services not found' });
         }
         else {
-          const services = rows.map((row) => new Service(row.id, row.type,row.description));
+          const services = rows.map((row) => new Service(row.id, row.type, row.description, row.serviceTime)); //check if name works or if we need to put service_time like in the DB field
           resolve(services);
         }
       });
