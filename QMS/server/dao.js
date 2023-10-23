@@ -81,7 +81,7 @@ exports.getUsers = () => {
 
 exports.getServices = () => {
   return new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM services";
+    const sql = "SELECT * FROM services";
     db.all(sql, [], (err, rows) => {
       if (err) { reject(err); }
       //if not find anything
@@ -93,10 +93,57 @@ exports.getServices = () => {
         resolve(services);
       }
     });
-
   });
 };
 
+exports.getServicesForCounter = (counterId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM counters WHERE id=?";
+    db.get(sql, [counterId], (err, row) => {
+      if(err) { reject(err); }
+      else {
+        resolve(row.services.split(','));
+      }
+    });
+  });
+}
+
+exports.getTicketsForService = (serviceType) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM tickets WHERE service_type=? AND status!=?";
+    db.all(sql, [serviceType,"closed"], (err,rows) => {
+      if(err) { reject(err); }
+      if(rows.length == 0) {
+        resolve({error: `Problem while retrieving queue for service ${serviceType}`});
+      } else {
+        const tickets = rows.map( (row) =>
+          new Ticket(
+          row.id,
+          row.counterid,
+          row.timestamp_created,
+          row.timestamp_finished,
+          row.service_type,
+          row.employeeid,
+          row.status,
+        ));
+        resolve(tickets);
+      }
+    })
+  })
+}
+
+exports.getServiceTime = (serviceType) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT service_time FROM services WHERE type=?";
+    db.get(sql, [serviceType], (err, row) => {
+      if(err) { reject(err); }
+      else {
+        console.log(row.service_time);
+        resolve(row.service_time);
+      }
+    });
+  });
+}
 
 exports.createTicket = (serviceType,ts,status) => {
   return new Promise((resolve, reject) => {
@@ -111,17 +158,30 @@ exports.createTicket = (serviceType,ts,status) => {
   });
 }
 
-exports.closeTicket = (ticketId,ts) => {
+exports.closeTicket= (ticketId,ts) => {
   return new Promise((resolve,reject) => {
     const sql="UPDATE tickets SET status=?, timestamp_finished=? WHERE id=?"
 
     db.run(sql,["closed",ts,ticketId], function(err) {
       if(err) {
         reject(err);
+      } else {
+        resolve(this.changes);
       }
-      resolve(this.changes);
-    })
-  })
+    });
+  });
+}
+
+exports.assignTicket = (ticketId, employeeId, counterId) => {
+  return new Promise((resolve,reject) => {
+    const sql="UPDATE tickets SET employeeid=?, counterid=? WHERE id=?";
+    db.run(sql,[employeeId, counterId, ticketId], function(err) {
+      if(err) { reject(err)}
+      else{
+        resolve(this.changes);
+      }
+    });
+  });
 }
 
 exports.deleteTicket = (ticketId) => {

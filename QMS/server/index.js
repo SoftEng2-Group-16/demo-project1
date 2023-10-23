@@ -154,6 +154,72 @@ app.put("/api/closeticket/:ticketId", async (req, res) => {
   }
 })
 
+//After the next ticket is fetched, when the employee notifies the next customer the ticket is automatically updated 
+//with the counterId and the employeeId
+//PUT /api/assignticket/:ticketId
+app.put('/api/assignticket/:ticketId', async (req, res) => {
+  const id = req.params.ticketId;
+  const employeeId = req.body.employeeId;
+  const counterId = req.body.counterId;
+
+  try{
+    const changes = await dao.assignTicket(id,employeeId,counterId);
+    return res.status(200).json(changes);
+  } catch(err) {
+    return res.status(500).json(err.message)
+  }
+});
+
+//When the employee is ready, he gets the next customer
+//The api gets all the tickets associated with services performed by the counter and chooses 
+//the one to serve based on the rules given (pick from the longest queue, if same lenght 
+//pick the one with smallest service time)
+//GET /api/nextcustomer/:counterId
+app.get('/api/nextcustomer/:counterId', async (req, res) => {
+  const counterId = req.params.counterId;
+  let services = [];
+  //console.log(counterId);
+  try {
+    services = await dao.getServicesForCounter(counterId);
+    if(services.error){
+      return res.status(404).json(services); //{error: 'Error while retrieving services for counter :counterId'}
+    }
+  } catch(err){
+    return res.status(500).json(err.message);
+  }
+
+  //create a map with service types as keys and list associated open tickets as values
+  const ticketsByService = new Map();
+  for (let s of services) {
+    await dao.getTicketsForService(s)
+      .then(tickets => ticketsByService.set(s, tickets))
+      .catch(err => {return res.status(500).json(err.message)})
+  }
+
+  //picks the right queue of tickets
+  let selectedQueue = [];
+  for(const tickets of ticketsByService.values()){
+    if(tickets.length > selectedQueue.length){
+      selectedQueue = tickets;
+    }
+    if(tickets.length == selectedQueue.length) {
+      const st1 = await dao.getServiceTime(tickets[0].serviceType);
+      console.log(st1);
+      const st2 = await dao.getServiceTime(selectedQueue[0].serviceType);
+      console.log(st2);
+      if(st1 > st2) {
+        selectedQueue = tickets;
+      }
+    }
+  }
+
+  //from the selected queue, picks the oldest ticket (should be done by timestamp, but since smallest ids were inserted 
+  //before, picks the entry with the smallest id)
+  return res.status(200).json(selectedQueue.reduce( (prev,curr) => prev.id < curr.id ? prev : curr));
+})
+
+
+
 
 //Customer choose a service type-> create new ticket
 //POST /api/ticket

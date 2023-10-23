@@ -8,9 +8,11 @@ and can be tested with its relative counterpart tool https://www.browserling.com
 
 | username  | password    | role   |
 |---        |---          |---|
-|  GGeppetto |  password1 |  officer |
-|  LVenigni |  password2 | admin  |
+|  GGeppetto |  password1 |  office_manager |
+|  LVenigni |  password2 | system_manager  |
 |  FGatto    |  password3 | employee  |
+| MRossi | password3 | employee  |
+| LVerdi | password3 | employee  |
 
 ### SESSIONS
 

@@ -8,8 +8,8 @@ POST http://localhost:3001/api/sessions/ HTTP/1.1
 content-type: application/json
 
 {
-    "username": "sample",
-    "password": "whatever"
+    "username": "MRossi",
+    "password": "password3"
 }
 
 
@@ -17,8 +17,19 @@ content-type: application/json
 GET http://localhost:3001/api/services
 
 ###
-PUT http://localhost:3001/api/closeticket/4
+GET http://localhost:3001/api/nextcustomer/2
 
+###
+PUT http://localhost:3001/api/assignticket/0
+content-type: application/json
+
+{
+    "counterId":2,
+    "employeeId":5
+}
+
+###
+PUT http://localhost:3001/api/closeticket/0
 
 ###
 POST http://localhost:3001/api/ticket 

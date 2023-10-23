@@ -10,7 +10,7 @@ function Service(id, type, description, serviceTime) {
 
 function Counter(id, services) {
     this.id = id;
-    this.type = services;
+    this.services = services;
 }
 
 function Ticket(id, counterId, timestampCreated,timestampFinished,serviceType,employeeId,status) {
