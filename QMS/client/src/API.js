@@ -62,36 +62,16 @@ async function createNewTicket(serviceType) {
                 "ts":ts,
                 "status":status
               }
-
-
-  const response = await fetch(SERVER_URL + '/api/ticket', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    body: JSON.stringify(ticket),
-  });
-  if (response.ok) {
-    const ticket = await response.json();
-    return ticket;
-  }
-  else {
-    const errDetails = await response.text();
-    throw errDetails;
-  }
-};
-  
-/*   return getJson(fetch(SERVER_URL + '/api/ticket'), {
+  return getJson((fetch(SERVER_URL + '/api/ticket'), {
     method:'POST',
     body: JSON.stringify(ticket),
     headers: {
       'Content-Type': 'application/json',
     },
     
-  }) */
+  }))
   
-
+}
 
 
 
@@ -101,7 +81,6 @@ async function createNewTicket(serviceType) {
  * A utility function for parsing the HTTP response.
  */
 function getJson(httpResponsePromise) {
-  console.log(httpResponsePromise)
   // server API always return JSON, in case of error the format is the following { error: <message> } 
   return new Promise((resolve, reject) => {
     httpResponsePromise
