@@ -70,5 +70,20 @@
   - Response: `503 Service Unavailable`
      - response body {"error":"Database error during the delete of ticket",id}
 
+## Utility functions
+### `getJson(httpResponsePromise)`
+- **Description**: A utility function for parsing HTTP responses.
+- **Parameters**:
+  - `httpResponsePromise` (Promise) - A promise representing the HTTP response.
 
-- GET: queue status/waiting time 
+- **Returns**:
+  - A Promise that resolves with the parsed JSON response or rejects with an error message.
+
+- **Behavior**:
+  - If the HTTP response is successful parse the JSON response and resolve the promise with the parsed JSON.
+  - If the response is not successful attempt to parse the response body to extract an error message and reject the promise with the error message.
+  - If there's an error in making the HTTP request (e.g., a network issue), reject the promise with a "Cannot communicate" error message.
+  
+  
+
+This utility function is helpful when working with API requests, ensuring that you can handle HTTP responses in a consistent manner, whether they represent success or errors.
