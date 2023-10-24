@@ -25,8 +25,11 @@ function Home(props) {
 
   const handleGetTicket = (service) => {
     // Handle the action when Button 1 is clicked
-    console.log(`Button 1 clicked for service ${service.type}`);
-    API.createNewTicket(service.type);
+    API.createNewTicket(service.type)
+    .then((ticketId)=>{
+      console.log(ticketId);
+      //maybe visualize the number of the ticket on the screen
+    })
   };
 
   const handleGetInfo = (service) => {

@@ -153,7 +153,7 @@ exports.createTicket = (serviceType,ts,status) => {
       if (err) {
         reject(err);
       }
-      resolve(this.changes);
+      resolve(this.lastID);
     });
   });
 }

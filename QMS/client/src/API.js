@@ -56,22 +56,25 @@ async function getAllServices() {
 }
 
 async function createNewTicket(serviceType) {
-  const ts=getCurrentTimestamp();
-  const status="pending";
-  const ticket={"serviceType": serviceType,
-                "ts":ts,
-                "status":status
-              }
-  return getJson((fetch(SERVER_URL + '/api/ticket'), {
-    method:'POST',
-    body: JSON.stringify(ticket),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    
-  }))
-  
+  const ts = getCurrentTimestamp();
+  const status = "pending";
+  const ticket = {
+    "serviceType": serviceType,
+    "ts": ts,
+    "status": status
+  };
+
+  return getJson(
+    fetch(SERVER_URL + '/api/ticket', {
+      method: 'POST',
+      body: JSON.stringify(ticket),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  );
 }
+
 
 
 

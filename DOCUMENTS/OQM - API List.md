@@ -59,7 +59,7 @@
 - POST `/api/ticket`
   - Description: choose a service type and add the ticket to the table without specifing the counterId and employeeId
   - Response: `200 OK` (success)
-    - Response body: number of insert rows, always 1
+    - Response body: id of the ticket has been created
   - Response: `503 Service Unavailable`
     - response body {"error":"Database error during the creation of new reservation"}
 
