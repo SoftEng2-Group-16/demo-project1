@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const SERVER_URL = 'http://localhost:3001';
 
-import { Service,Counter,Ticket } from "./model";
+import { Service,Counter,Ticket,getCurrentTimestamp } from "./model";
 
 
 const logIn = async (credentials) => {
@@ -55,6 +55,27 @@ async function getAllServices() {
 
 }
 
+async function createNewTicket(serviceType) {
+  const ts=getCurrentTimestamp();
+  const status="pending";
+  const ticket={"serviceType": serviceType,
+                "ts":ts,
+                "status":status
+              }
+  console.log(ticket);
+  return getJson(fetch(SERVER_URL + '/api/ticket'), {
+    method:'POST',
+    body: JSON.stringify(ticket),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    
+  })
+  
+}
+
+
+
 //EMPLOYEE
 
 /**
@@ -87,5 +108,5 @@ function getJson(httpResponsePromise) {
 }
 
 
-const API = { logIn, logOut, getUserInfo,getAllServices };
+const API = { logIn, logOut, getUserInfo,getAllServices,createNewTicket };
 export default API;
