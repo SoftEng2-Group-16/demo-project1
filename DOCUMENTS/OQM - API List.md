@@ -4,13 +4,13 @@
 - POST `/api/sessions`
   - Description: request for login
   - Request body:
-    - object {username,password}
+    - object {`username`,`password`}
   - Response: `200 OK` (success)
     - Response body:
-      - object user {id,username,name}
+      - object user {`id`,`username`,`name`}
   - Response: `401 Unauthorized`
     - response body:
-      - {"error":"Incorrect username or password"}
+      - {`error`:"Incorrect username or password"}
 
 - DELETE `/api/sessions/current`
   - Description: Logout
@@ -21,10 +21,32 @@
   - Response: `200 OK` (success)
     - Response body: object user
   - Response: `401 Unauthorized`
-    - response body {"error":"Not authenticated"}
+    - response body {`error`:"Not authenticated"}
 
-- POST: save customer serviced
-- GET: get next customer to serve
+- PUT: `/api/closeticket/:ticketId`
+  - Description: closes the ticket when the customer is served (change ticket status to closed and adds closing timestamp)
+  - Response: `200 OK` (success)
+    - Response body:  contains the number of changes made (should be 1, just one row is updated)
+  - Response: `500 Internal Server Error` (failure) when an error is encountered
+
+- PUT: `/api/assignticket/:ticketId`
+  - Description: updates the ticket selected from the queue with the counterId and the employeeId
+  - Request body: object containing counterId and employeeId to assign the ticket to -> {`counterId`, `employeeId`}
+  - Response: `200 OK` (success)
+    - Response body:  contains the number of changes made (should be 1, just one row is updated)
+  - Response: `500 Internal Server Error` (failure) when an error is encountered
+  
+- GET: `/api/nextcustomer/:counterId`
+  - Description: gets next ticket to serve, picking it from the queue of services performed by the counter with the given id
+  - Response: `200 OK` (success)
+    - Response body: contains the selected ticket -> {`id`, `counterId`, `timestampCreated`, `timestampFinished`, `serviceType`, `employeeId`, `status`}
+
+      Note: `timestampFinished`, `counterId` and `employeeId` will be empty or null since the ticket has not been assigned yet, only fetched; ticketStatus will be set to `pending` since the ticket has yet to be served.
+  - Response: `404 Not found` (failure), retuned if retrieval of tickets in queue or if retrieval of services for the counter fails
+
+    Note: could also mean empty queue! Needs to be tested more comprehensively
+  - Response: `500 Internal Server Error` (failure), general server error 
+
 
 ## Customer
 - GET `/api/services`

@@ -193,7 +193,7 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
   for (let s of services) {
     await dao.getTicketsForService(s)
       .then(tickets => ticketsByService.set(s, tickets))
-      .catch(err => {return res.status(500).json(err.message)})
+      .catch(err => {return res.status(404).json(err.message)})
   }
 
   //picks the right queue of tickets
