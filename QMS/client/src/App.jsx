@@ -11,6 +11,7 @@ import MessageContext from './messageCtx.jsx';
 import API from './API';
 import { LoginForm } from './components/AuthComponents';
 import Home from './components/Home';
+import EmployeePage from './components/EmployeePage';
 
 
 function App() {
@@ -91,8 +92,8 @@ function App() {
         >
           <Route path="/" element={<Home />} ></Route>
           <Route path="*" element={<NotFoundLayout  />} />
-          <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <LoginForm login={handleLogin} />}
-          />
+          <Route path="/login" element={loggedIn ? <Navigate replace to="/employee" /> : <LoginForm login={handleLogin}/>} />
+          <Route path="/employee" element={loggedIn ? <EmployeePage /> : <LoginForm login={handleLogin}/>} />
         </Route>
       </Routes>
       </MessageContext.Provider>
