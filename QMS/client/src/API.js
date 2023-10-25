@@ -79,6 +79,14 @@ async function createNewTicket(serviceType) {
 
 
 //EMPLOYEE
+async function closeTicket(ticketId) {
+  return getJson(
+    fetch( (SERVER_URL + `/api/closeticket/${ticketId}`), {
+      method:'PUT',
+      //credentials: 'include' commented for testing, in real app only authenticated employees can call this API
+    })
+  );
+}
 
 /**
  * A utility function for parsing the HTTP response.
@@ -110,5 +118,5 @@ function getJson(httpResponsePromise) {
 }
 
 
-const API = { logIn, logOut, getUserInfo,getAllServices,createNewTicket };
+const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket };
 export default API;
