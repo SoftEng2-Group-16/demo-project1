@@ -88,6 +88,30 @@ async function closeTicket(ticketId) {
   );
 }
 
+async function getNextTicketToServe(counterId) {
+  return getJson( 
+    fetch(SERVER_URL + `/api/nextcustomer/${counterId}`), {
+      method: 'GET',
+      //credentials: 'include' commented for testing, to evaluate if decomment it or not
+    });
+}
+
+async function assignTicket(ticketId, employeeId, counterId) {
+  const counterData = {
+    "employeeId": employeeId,
+    "counterId": counterId
+  };
+  return getJson(
+    fetch( (SERVER_URL + `/api/assignticket/${ticketId}`), {
+      method: 'PUT',
+      //credentials: 'include', commented for testing, in real app only authenticated employees can modify the ticket
+      body: JSON.stringify(counterData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  );
+}
 /**
  * A utility function for parsing the HTTP response.
  */
@@ -118,5 +142,5 @@ function getJson(httpResponsePromise) {
 }
 
 
-const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket };
+const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket, getNextTicketToServe, assignTicket };
 export default API;
