@@ -1,4 +1,5 @@
-import { Card, Button, Row, Col, Container } from 'react-bootstrap';
+/* eslint-disable react/prop-types */
+import { Card, Button, Row, Col, Container, Modal } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 
 import MessageContext from '../messageCtx.jsx';
@@ -9,7 +10,8 @@ function Home(props) {
   const { handleErrors } = useContext(MessageContext);
   const [services, setServices] = useState([]); // List of services with their information
   const [loading, setLoading] = useState(true);
-  const [buttonsVisible, setButtonsVisible] = useState(false);
+
+  const [ticketVisible, setTicketVisible] = useState(null);
 
   useEffect(() => {
     // Fetch services data from the API
@@ -26,10 +28,11 @@ function Home(props) {
   const handleGetTicket = (service) => {
     // Handle the action when Button 1 is clicked
     API.createNewTicket(service.type)
-    .then((ticketId)=>{
-      console.log(ticketId);
-      //maybe visualize the number of the ticket on the screen
-    })
+      .then((ticketId) => {
+        console.log(ticketId);
+        //maybe visualize the number of the ticket on the screen
+        setTicketVisible(ticketId);
+      })
   };
 
   const handleGetInfo = (service) => {
@@ -56,18 +59,53 @@ function Home(props) {
                     </Card.Text>
                     <div style={{ marginTop: '10px' }}>
                       <Button variant="primary" style={{ marginRight: '10px' }} onClick={() => handleGetTicket(service)}>Get Ticket</Button>
+                      
+                      {/* Add more buttons if necessary
                       <Button variant="secondary" onClick={() => handleGetInfo(service)}>Get Info</Button>
-                      {/* Add more buttons if necessary */}
+                       */}
                     </div>
                   </Card.Body>
                 </Card>
               </Col>
             ))}
           </Row>
+
+          {ticketVisible && (
+            <TicketDisplay
+              ticketId={ticketVisible}
+              onClose={() => setTicketVisible(null)}
+            />
+          )}
         </Container>
       )}
     </>
   );
 }
+
+function TicketDisplay(props) {
+  return (
+    <Modal
+      show={true}
+      onHide={props.onClose}
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Ticket Details</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="ticket-content">
+          <h4>Ticket ID</h4>
+          <p className="ticket-id">{props.ticketId}</p>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={props.onClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
 
 export default Home;

@@ -138,7 +138,6 @@ exports.getServiceTime = (serviceType) => {
     db.get(sql, [serviceType], (err, row) => {
       if(err) { reject(err); }
       else {
-        console.log(row.service_time);
         resolve(row.service_time);
       }
     });

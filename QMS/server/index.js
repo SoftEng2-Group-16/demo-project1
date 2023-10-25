@@ -204,17 +204,15 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
     }
     if(tickets.length == selectedQueue.length) {
       const st1 = await dao.getServiceTime(tickets[0].serviceType);
-      console.log(st1);
       const st2 = await dao.getServiceTime(selectedQueue[0].serviceType);
-      console.log(st2);
-      if(st1 > st2) {
+      if(st1 < st2) {
         selectedQueue = tickets;
       }
     }
   }
 
-  //from the selected queue, picks the oldest ticket (should be done by timestamp, but since smallest ids were inserted 
-  //before, picks the entry with the smallest id)
+  //from the selected queue, picks the oldest ticket (should be done by timestamp, but since smallest ids mean older
+  //records in the table, we pick the entry with the smallest id)
   return res.status(200).json(selectedQueue.reduce( (prev,curr) => prev.id < curr.id ? prev : curr));
 })
 

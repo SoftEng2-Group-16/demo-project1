@@ -42,4 +42,4 @@ content-type: application/json
 }
 
 ###
-DELETE http://localhost:3001/api/tickets/6
+DELETE http://localhost:3001/api/tickets/30
