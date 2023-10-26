@@ -147,7 +147,7 @@ app.get("/api/services", getAllServices);
 
 //When employee finishes serving tickets, updates the status from pending to closed and adds the timestamp field
 //PUT /api/closeticket/:ticketId
-//the id of the ticket is passed as a parameter in the url 
+//the id of the ticket is passed as a parameter in the url
 app.put("/api/closeticket/:ticketId", async (req, res) => {
   const id = req.params.ticketId;
   const ts = dayjs().format("DD/MM/YYYY HH:mm:ss")
@@ -168,6 +168,7 @@ app.put('/api/assignticket/:ticketId', async (req, res) => {
   const employeeId = req.body.employeeId;
   const counterId = req.body.counterId;
 
+  //we shoud add a timestamp in the DB to identify the moment the tickets is started by the employee
   try{
     const changes = await dao.assignTicket(id,employeeId,counterId);
     return res.status(200).json(changes);
@@ -225,7 +226,7 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
   }
 })
 
-app.get('/api/pendingtickets', async (req, res) => {
+const getServicingTickets = async (req, res) => {
   try {
     const pendingTickets = await dao.getServicingTickets();
     if(pendingTickets.error) {
@@ -236,7 +237,8 @@ app.get('/api/pendingtickets', async (req, res) => {
   } catch(err) {
     return res.status(500).json(err.message);
   }
-})
+}
+app.get('/api/pendingtickets', getServicingTickets)
 
 
 

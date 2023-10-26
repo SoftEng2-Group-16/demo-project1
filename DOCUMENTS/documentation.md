@@ -68,8 +68,12 @@ A final update is done once the customer has been served updating the ts_finishe
 
 **Note by LFMV: I removed the constraint NOTNULL on the field Counter (External Key) since only the 'employee' user are bound with counters**
 
+### Done
 **Idea for the main board**: we should add another possible state for the ticket (passing from `pending`/`closed` to something like `opened`/`assigned`/`closed`). In this way:
   - When the ticket is created, the default status is `opened` (need to modify the opening API)
   - When the ticket is assigned to an employee/counter, the status goes to `assigned` (need to modify the assign ticket API)
   - When the ticket is finished, the status goes to `closed` (need to modify the close ticket API)
   - To populate the board on the homepage, we simply need to add a GET API which provides all the rows in the ticket table  with the status set to assigned (should be as many as the number of counters, maybe less if a counter has closed its last ticket and is waiting to call the next customer, **never** more)
+
+### TODO
+We shoud add a timestamp_started to the ticket, so it's easier to identify the most recent served ticket
