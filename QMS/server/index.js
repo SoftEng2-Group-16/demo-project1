@@ -126,7 +126,7 @@ const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
  */
 
 //GET /api/services
-app.get("/api/services", async (req, res) => {
+const getAllServices = async (req, res) => {
   try {
     const services = await dao.getServices();
     if (services.error) {
@@ -137,7 +137,8 @@ app.get("/api/services", async (req, res) => {
   } catch (error) {
     return res.status(500).json(error.message);
   }
-});
+}
+app.get("/api/services", getAllServices);
 
 //When employee finishes serving tickets, updates the status from pending to closed and adds the timestamp field
 //PUT /api/closeticket/:ticketId
@@ -221,38 +222,37 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
 
 //Customer choose a service type-> create new ticket
 //POST /api/ticket
+const createNewTicket = async (req, res) => {
+  const errors = validationResult(req).formatWith(errorFormatter); // format error message
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ error: errors.array().join(", ") }); // error message is a single string with all error joined together
+  }
+  try {
+    const ticket = await dao.createTicket(req.body.serviceType, req.body.ts, req.body.status);
+    return res.status(200).json(ticket);
+  } catch (err) {
+    res.status(503).json({ error: `Database error during the creation of new ticket: ${err}` });
+  }
+}
 app.post('/api/ticket',
   [
     check("serviceType").isString(),
     check("status").isString(),
     check("ts").isString(),
   ],
-  async (req, res) => {
-    const errors = validationResult(req).formatWith(errorFormatter); // format error message
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ error: errors.array().join(", ") }); // error message is a single string with all error joined together
-    }
-    try {
-      const ticket = await dao.createTicket(req.body.serviceType, req.body.ts, req.body.status);
-      return res.status(200).json(ticket);
-    } catch (err) {
-      res.status(503).json({ error: `Database error during the creation of new ticket: ${err}` });
-    }
-  }
-)
+  createNewTicket
+);
 
 //delete a ticket
-app.delete("/api/tickets/:id",
-  check("id").isInt(),
-  async (req, res) => {
-    try {
-      const result = await dao.deleteTicket(req.params.id);
-      res.status(200).json(result);
-    } catch (err) {
-      res.status(503).json({ error: 'Database error during the deletion ' });
-    }
+const deleteTicket = async (req, res) => {
+  try {
+    const result = await dao.deleteTicket(req.params.id);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(503).json({ error: 'Database error during the deletion' });
   }
-);
+}
+app.delete("/api/tickets/:id", check("id").isInt(), deleteTicket);
 
 
 // activate the server
