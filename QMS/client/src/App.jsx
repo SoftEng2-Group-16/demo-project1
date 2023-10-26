@@ -13,6 +13,7 @@ import { LoginForm } from './components/AuthComponents';
 import Home from './components/Home';
 import Employee from './components/Employee';
 import Ticketing from './components/Ticketing';
+import CounterDisplay from './components/CounterComponent';
 
 
 function App() {
@@ -95,8 +96,9 @@ function App() {
           <Route path="/" element={<Home />} ></Route>
           <Route path="/ticketing" element={<Ticketing />} ></Route>
           <Route path="*" element={<NotFoundLayout  />} />
-          <Route path="/login" element={loggedIn ? <Navigate replace to="/employee" /> : <LoginForm login={handleLogin}/>} />
           <Route path="/employee" element={loggedIn ? <Employee /> : <LoginForm login={handleLogin}/>} />
+          <Route path="/login" element={loggedIn ? <Navigate replace to="/employee" /> : <LoginForm login={handleLogin} />}/>
+          <Route path="/counterDisplay" element={<CounterDisplay  />} />
         </Route>
       </Routes>
       </MessageContext.Provider>
