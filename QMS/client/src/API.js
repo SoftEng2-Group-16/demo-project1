@@ -77,10 +77,10 @@ async function createNewTicket(serviceType) {
 
 async function getServicingTickets() {
   return getJson(
-    fetch(SERVER_URL + '/api/pendingtickets'), {
-      method:'GET'
-    }
-  );
+    fetch(SERVER_URL + '/api/pendingtickets'))
+    .then(json => {
+    return json.map((ticket) => new Ticket(ticket.id, ticket.counterId, ticket.timestampCreated, ticket.timestampFinished, ticket.serviceType, ticket.employeeId))
+  });
 }
 
 
