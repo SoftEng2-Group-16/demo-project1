@@ -26,22 +26,16 @@ function Home(props) {
         handleErrors(err);
       });
 
-      API.getServicingTickets()
-      .then((tickets) => {
-        setTickets(tickets);
-        setLoading(false);
-      })
-      .catch((err) => {
-        handleErrors(err);
-      });
   }, []); // Reload is done after every rendering of the component
 
-  return (
+  //the first div is the one that will show the next customer
+  return ( 
     <>
       {loading ? (
         <LoadingLayout />
       ) : (
         <Container>
+          
           {false && 
 <div style={{display: 'flex', justifyContent: 'center'}}>
           <CardGroup style={{ width: '60rem', height: '14rem', marginBottom: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', display: 'flex', justifyContent: 'center' }}>

@@ -12,7 +12,8 @@ function NavHeader(props) {
         QMS - Queue Management System
       </Navbar.Brand>
       <Nav className="me-auto">
-        <Nav.Link href='/ticketing'>Ticketing</Nav.Link>
+        {!props.loggedIn && <Nav.Link href='/ticketing'>Ticketing</Nav.Link>}
+        
       </Nav>
       {props.loggedIn ? <>
       <Navbar.Text>

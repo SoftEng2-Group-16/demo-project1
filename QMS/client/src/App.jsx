@@ -1,6 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Alert } from 'react-bootstrap';
+import { Container, Row, Alert, Col } from 'react-bootstrap';
+
 import './App.css'
 import NavHeader from './components/NavbarComponents';
 import { NotFoundLayout, LoadingLayout } from './components/PageLayout';
@@ -34,7 +35,6 @@ function App() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (loggedIn) {
         try {
           const user = await API.getUserInfo(); // we have the user info here 
           if (user) {
@@ -53,7 +53,7 @@ function App() {
           }
         } catch { (err) => { return null; } }
 
-      }
+      
     }
     checkAuth();
   }, [loggedIn]);
@@ -99,11 +99,10 @@ function App() {
             </>
           }
         >
-          <Route path="/" element={<Home />} ></Route>
-          <Route path="/ticketing" element={<Ticketing />} ></Route>
+          <Route path="/" element={loggedIn? <Employee counterID={user.counterId} employeeId={user.id} /> :<Home />} ></Route>
+          <Route path="/ticketing" element={loggedIn? <Col> This page is only for customers</Col> : <Ticketing /> } ></Route>
           <Route path="*" element={<NotFoundLayout  />} />
-          <Route path="/employee" element={loggedIn ? <Employee counterID={user.counterId} employeeId={user.id} /> : <LoginForm login={handleLogin}/>} />
-          <Route path="/login" element={loggedIn ? <Navigate replace to="/employee" /> : <LoginForm login={handleLogin} />}/>
+          <Route path="/login" element={loggedIn ? <Navigate replace to="/" /> : <LoginForm login={handleLogin} />}/>
           <Route path="/counterDisplay/:counterID" element={<CounterDisplay  />} />
         </Route>
       </Routes>
