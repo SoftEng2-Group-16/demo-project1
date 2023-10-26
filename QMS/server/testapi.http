@@ -17,7 +17,7 @@ content-type: application/json
 GET http://localhost:3001/api/services
 
 ###
-GET http://localhost:3001/api/nextcustomer/2
+GET http://localhost:3001/api/nextcustomer/1
 
 ###
 PUT http://localhost:3001/api/assignticket/0

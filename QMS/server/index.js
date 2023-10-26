@@ -32,7 +32,12 @@ app.use(cors(corsOptions));
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
   try {
     const userDAO = await dao.getUser(username, password);
-    const user = { id: userDAO.id, username: userDAO.username, counterId: userDAO.counter }
+    const user = { 
+      id: userDAO.id, 
+      username: userDAO.username, 
+      counterId: userDAO.counter,
+      role: userDAO.role 
+    }
     console.log(user)
     if (!user)
       return cb(null, false, 'Incorrect username or password.');
@@ -214,7 +219,11 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
 
   //from the selected queue, picks the oldest ticket (should be done by timestamp, but since smallest ids mean older
   //records in the table, we pick the entry with the smallest id)
-  return res.status(200).json(selectedQueue.reduce( (prev,curr) => prev.id < curr.id ? prev : curr));
+  if(selectedQueue.length == 0) {
+    return res.status(404).json({error: `No tickets in queue for services provided by counter ${counterId}`})
+  } else {
+    return res.status(200).json(selectedQueue.reduce( (prev,curr) => prev.id < curr.id ? prev : curr));
+  }
 })
 
 
