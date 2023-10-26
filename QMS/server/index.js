@@ -226,6 +226,28 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
   }
 })
 
+
+const getServicesForCounter = async (req, res) => {
+  try {
+    let servicesTypes = await dao.getServicesForCounter(req.params.counterId);//list of services types
+    if (servicesTypes.error) {
+      return res.status(404).json(services);  //{ error: 'No services found'})
+    }
+    else{
+      let listOfServices =[];
+      for(let type of servicesTypes){
+        const services= await dao.getServices(type);
+       console.log(services);
+        listOfServices.push(services[0]);
+      }
+      return res.status(200).json(listOfServices);
+    }
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+app.get("/api/services/:counterId", getServicesForCounter);
+
 const getServicingTickets = async (req, res) => {
   try {
     const pendingTickets = await dao.getServicingTickets();

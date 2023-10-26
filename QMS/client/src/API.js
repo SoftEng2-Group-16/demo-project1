@@ -84,7 +84,13 @@ async function getServicingTickets() {
 }
 
 
+async function getServicesForCounter(counterId) {
+  return getJson(fetch(SERVER_URL +  `/api/services/${counterId}`))
+    .then(json => {
+      return json.map((service) => new Service(service.id, service.type,service.description,service.serviveTime))
+    });
 
+}
 
 
 //EMPLOYEE
@@ -151,5 +157,6 @@ function getJson(httpResponsePromise) {
 }
 
 
-const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket, getNextTicketToServe, assignTicket, getServicingTickets };
+const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket,
+   getNextTicketToServe, assignTicket, getServicingTickets,getServicesForCounter };
 export default API;

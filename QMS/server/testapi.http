@@ -17,6 +17,10 @@ content-type: application/json
 GET http://localhost:3001/api/services
 
 ###
+GET http://localhost:3001/api/services/0
+
+
+###
 GET http://localhost:3001/api/nextcustomer/1
 
 ###

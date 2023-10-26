@@ -41,6 +41,7 @@ function App() {
             setUser({
               id: user.id,
               username: user.username,
+              counterId:user.counterId,
             })
 
             setLoggedIn(true);
@@ -96,7 +97,7 @@ function App() {
           <Route path="/" element={<Home />} ></Route>
           <Route path="/ticketing" element={<Ticketing />} ></Route>
           <Route path="*" element={<NotFoundLayout  />} />
-          <Route path="/employee" element={loggedIn ? <Employee /> : <LoginForm login={handleLogin}/>} />
+          <Route path="/employee" element={loggedIn ? <Employee counterId={user.counterId} /> : <LoginForm login={handleLogin}/>} />
           <Route path="/login" element={loggedIn ? <Navigate replace to="/employee" /> : <LoginForm login={handleLogin} />}/>
           <Route path="/counterDisplay" element={<CounterDisplay  />} />
         </Route>

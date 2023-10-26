@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 function LoginForm(props) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('MRossi');
+  const [password, setPassword] = useState('password3');
 
   const handleSubmit = (event) => {
     event.preventDefault();

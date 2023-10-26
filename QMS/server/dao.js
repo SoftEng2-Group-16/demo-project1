@@ -79,10 +79,17 @@ exports.getUsers = () => {
 
 //API SECTION
 
-exports.getServices = () => {
+exports.getServices = (type) => {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT * FROM services";
-    db.all(sql, [], (err, rows) => {
+    let sql="";
+    if(type){
+      sql="SELECT * FROM services WHERE type=?"
+    }
+    else{
+      sql="SELECT * FROM services"
+    }
+    db.all(sql, [type], (err, rows) => {
+      console.log(rows);
       if (err) { reject(err); }
       //if not find anything
       if (rows.length == 0) {
@@ -101,6 +108,9 @@ exports.getServicesForCounter = (counterId) => {
     const sql = "SELECT * FROM counters WHERE id=?";
     db.get(sql, [counterId], (err, row) => {
       if(err) { reject(err); }
+      if(row==null){
+        resolve({error: `Problem while retrieving services for counterID ${counterId}`});
+      }
       else {
         resolve(row.services.split(','));
       }

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Card, Button, Row, Col, Container } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 
@@ -10,12 +11,16 @@ function EmployeePage(props) {
   const [services, setServices] = useState([]); // List of services with their information
   const [loading, setLoading] = useState(true);
   const [buttonsVisible, setButtonsVisible] = useState(false);
+  
+  console.log(props.counterId); //the component is rendered 2 times and ofr some reason the forst time this value is undefined
 
   useEffect(() => {
+    
     // Fetch services data from the API
-    API.getAllServices()
+    API.getServicesForCounter(props.counterId)
       .then((services) => {
         setServices(services);
+        console.log(services);
         setLoading(false);
       })
       .catch((err) => {
