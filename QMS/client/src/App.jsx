@@ -38,10 +38,16 @@ function App() {
         try {
           const user = await API.getUserInfo(); // we have the user info here 
           if (user) {
+            user.role == "employee" ?
             setUser({
               id: user.id,
               username: user.username,
-            })
+              counterId: user.counterId,
+            }) :
+            setUser({
+              id: user.id,
+              username: user.username,
+            }); 
 
             setLoggedIn(true);
           }
@@ -96,9 +102,9 @@ function App() {
           <Route path="/" element={<Home />} ></Route>
           <Route path="/ticketing" element={<Ticketing />} ></Route>
           <Route path="*" element={<NotFoundLayout  />} />
-          <Route path="/employee" element={loggedIn ? <Employee /> : <LoginForm login={handleLogin}/>} />
+          <Route path="/employee" element={loggedIn ? <Employee counterID={user.counterId} employeeId={user.id} /> : <LoginForm login={handleLogin}/>} />
           <Route path="/login" element={loggedIn ? <Navigate replace to="/employee" /> : <LoginForm login={handleLogin} />}/>
-          <Route path="/counterDisplay" element={<CounterDisplay  />} />
+          <Route path="/counterDisplay/:counterID" element={<CounterDisplay  />} />
         </Route>
       </Routes>
       </MessageContext.Provider>

@@ -1,4 +1,5 @@
 import { Card, Button, Row, Col, Container } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from 'react';
 
 import MessageContext from '../messageCtx.jsx';
@@ -7,12 +8,15 @@ import { LoadingLayout } from './PageLayout.jsx';
 
 function EmployeePage(props) {
   const { handleErrors } = useContext(MessageContext);
+  //const navigate = useNavigate();
   const [services, setServices] = useState([]); // List of services with their information
   const [loading, setLoading] = useState(true);
   const [ticketID, setTicketID] = useState(null);
-  const [buttonsVisible, setButtonsVisible] = useState(false);
+  const [counterID, setCounterID] = useState(-1);
+  const [buttonsVisible, setButtonsVisible] = useState(true);
 
   useEffect(() => {
+    setCounterID(props.counterID);
     // Fetch services data from the API
     API.getAllServices()
       .then((services) => {
@@ -25,16 +29,30 @@ function EmployeePage(props) {
       });
   }, []); // Reload is done after every rendering of the component
 
-  const handleNextCustomer = (service) => {
-    // Handle the action when Button 1 is clicked
+  const handleNextCustomer = (counterID) => {
+    // get next customer
+    API.getNextTicketToServe(counterID).then((res) => {
+      setButtonsVisible(false);
+      // assign counterId to the ticket and employeeID
+      API.assignTicket(ticketID, props.employeeId, counterID).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        handleErrors(err);
+      });
+    })
+    .catch((err) => {
+      handleErrors(err);
+    });
+
+    // call the counter display with the customer ticket
+    // navigate(`/counterDisplay/${counterID}`)
     
   };
 
   const handleFinishService = (ticketID) => {
     API.closeTicket(ticketID).then((res) => {
-      console.log(res)
-      // TODO: disable finish service button and enable call next customer button
-      }).catch((err) => {
+      setButtonsVisible(true);
+    }).catch((err) => {
       handleErrors(err);
     });
   }
@@ -46,25 +64,17 @@ function EmployeePage(props) {
       ) : (
         <Container>
           <Row>
-            {services.map((service) => (
-              <Col key={service.id}>
-                <Card style={{ width: '18rem', height: '12rem', marginBottom: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-                  <Card.Body>LoadingLayout
-                    <Card.Title style={{ fontSize: '1.5rem', fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>
-                      {service.type}
-                    </Card.Title>
-                    <Card.Text style={{ fontSize: '1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>
-                      {service.description}
+              <Col>
+                <Card>
+                  <Card.Body>
+                    <Card.Title>Counter n: {props.counterID}</Card.Title>
+                    <Card.Text>
+                      <Button variant="primary" disabled={!buttonsVisible} style={{ marginRight: '10px' }} onClick={() => handleNextCustomer(counterID)}>Call Next Customer</Button>
+                      <Button variant="danger" disabled={buttonsVisible} style={{ marginRight: '10px' }} onClick={() => handleFinishService(ticketID)}>Finish Service</Button>
                     </Card.Text>
-                    <div className="d-flex justify-content-around" style={{ marginTop: '10px' }}>
-                      <Button variant="primary" style={{ marginRight: '10px'}} onClick={() => handleNextCustomer(service)}>Call Next Customer</Button>
-                      <Button variant="secondary" style={{ marginRight: '10px' }} onClick={() => handleFinishService(ticketID)}>Finish Service</Button>
-                      {/* Add more buttons if necessary */}
-                    </div>
                   </Card.Body>
                 </Card>
               </Col>
-            ))}
           </Row>
         </Container>
       )}
