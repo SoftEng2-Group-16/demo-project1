@@ -173,14 +173,39 @@ exports.closeTicket= (ticketId,ts) => {
 
 exports.assignTicket = (ticketId, employeeId, counterId) => {
   return new Promise((resolve,reject) => {
-    const sql="UPDATE tickets SET employeeid=?, counterid=? WHERE id=?";
-    db.run(sql,[employeeId, counterId, ticketId], function(err) {
+    const sql="UPDATE tickets SET employeeid=?, counterid=?, status=? WHERE id=?";
+    db.run(sql,[employeeId, counterId, "pending", ticketId], function(err) {
       if(err) { reject(err)}
       else{
         resolve(this.changes);
       }
     });
   });
+}
+
+exports.getServicingTickets = () => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM tickets WHERE status=? ORDER BY counterid";
+    db.all(sql, ["pending"], (err,rows) => {
+      console.log("ciao");
+      if(err) { reject(err); }
+      if(rows.length == 0) {
+        resolve({error: `Problem while retrieving pending tickets`});
+      } else {
+        const tickets = rows.map( (row) =>
+          new Ticket(
+          row.id,
+          row.counterid,
+          row.timestamp_created,
+          row.timestamp_finished,
+          row.service_type,
+          row.employeeid,
+          row.status,
+        ));
+        resolve(tickets);
+      }
+    })
+  })
 }
 
 exports.deleteTicket = (ticketId) => {

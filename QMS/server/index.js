@@ -216,13 +216,25 @@ app.get('/api/nextcustomer/:counterId', async (req, res) => {
       }
     }
   }
-
-  //from the selected queue, picks the oldest ticket (should be done by timestamp, but since smallest ids mean older
+    //from the selected queue, picks the oldest ticket (should be done by timestamp, but since smallest ids mean older
   //records in the table, we pick the entry with the smallest id)
   if(selectedQueue.length == 0) {
     return res.status(404).json({error: `No tickets in queue for services provided by counter ${counterId}`})
   } else {
     return res.status(200).json(selectedQueue.reduce( (prev,curr) => prev.id < curr.id ? prev : curr));
+  }
+})
+
+app.get('/api/pendingtickets', async (req, res) => {
+  try {
+    const pendingTickets = await dao.getServicingTickets();
+    if(pendingTickets.error) {
+      return res.status(404).json(pendingTickets);
+    } else {
+      return res.status(200).json(pendingTickets);
+    }
+  } catch(err) {
+    return res.status(500).json(err.message);
   }
 })
 

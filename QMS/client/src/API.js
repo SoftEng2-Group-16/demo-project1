@@ -57,7 +57,7 @@ async function getAllServices() {
 
 async function createNewTicket(serviceType) {
   const ts = getCurrentTimestamp();
-  const status = "pending";
+  const status = "opened";
   const ticket = {
     "serviceType": serviceType,
     "ts": ts,
@@ -74,6 +74,15 @@ async function createNewTicket(serviceType) {
     })
   );
 }
+
+async function getServicingTickets() {
+  return getJson(
+    fetch(SERVER_URL + '/api/pendingtickets'), {
+      method:'GET'
+    }
+  );
+}
+
 
 
 
@@ -142,5 +151,5 @@ function getJson(httpResponsePromise) {
 }
 
 
-const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket, getNextTicketToServe, assignTicket };
+const API = { logIn, logOut, getUserInfo, getAllServices, createNewTicket, closeTicket, getNextTicketToServe, assignTicket, getServicingTickets };
 export default API;
