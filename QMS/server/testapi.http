@@ -23,7 +23,7 @@ GET http://localhost:3001/api/nextcustomer/1
 GET http://localhost:3001/api/pendingtickets
 
 ###
-PUT http://localhost:3001/api/assignticket/0
+PUT http://localhost:3001/api/assignticket/1
 content-type: application/json
 
 {
