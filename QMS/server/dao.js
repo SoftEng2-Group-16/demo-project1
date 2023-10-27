@@ -110,8 +110,8 @@ exports.getServicesForCounter = (counterId) => {
 
 exports.getTicketsForService = (serviceType) => {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT * FROM tickets WHERE service_type=? AND status!=?";
-    db.all(sql, [serviceType,"closed"], (err,rows) => {
+    const sql = "SELECT * FROM tickets WHERE service_type=? AND status =?";
+    db.all(sql, [serviceType,"opened"], (err,rows) => {
       if(err) { reject(err); }
       if(rows.length == 0) {
         resolve({error: `Problem while retrieving queue for service ${serviceType}`});

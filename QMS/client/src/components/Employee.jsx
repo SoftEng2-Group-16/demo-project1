@@ -22,7 +22,7 @@ function EmployeePage(props) {
       .then((services) => {
         setServices(services);
         setLoading(false);
-        setTicketID(2);
+        //setTicketID(2);
       })
       .catch((err) => {
         handleErrors(err);
@@ -32,10 +32,12 @@ function EmployeePage(props) {
   const handleNextCustomer = (counterID) => {
     // get next customer
     API.getNextTicketToServe(counterID).then((res) => {
+      console.log(res)
+      setTicketID(res.id);
       setButtonsVisible(false);
       // assign counterId to the ticket and employeeID
       API.assignTicket(ticketID, props.employeeId, counterID).then((res) => {
-        console.log(res)
+        console.log(res);
       }).catch((err) => {
         handleErrors(err);
       });
@@ -69,13 +71,21 @@ function EmployeePage(props) {
                   <Card.Body>
                     <Card.Title>Counter n: {props.counterID}</Card.Title>
                     <Card.Text>
-                      <Button variant="primary" disabled={!buttonsVisible} style={{ marginRight: '10px' }} onClick={() => handleNextCustomer(counterID)}>Call Next Customer</Button>
+                      <Button variant="primary" disabled={!buttonsVisible} style={{ marginRight: '10px' }} onClick={() => handleNextCustomer(props.counterID)}>Call Next Customer</Button>
                       <Button variant="danger" disabled={buttonsVisible} style={{ marginRight: '10px' }} onClick={() => handleFinishService(ticketID)}>Finish Service</Button>
                     </Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
           </Row>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <Container>
+              <Card>
+                <Card.Title> Serving customer number</Card.Title>
+                <Card.Text className="font-weight-bold fs-1">{ticketID !== undefined ? ticketID : '---'}</Card.Text>
+              </Card>
+            </Container>
+          </div>
         </Container>
       )}
     </>
