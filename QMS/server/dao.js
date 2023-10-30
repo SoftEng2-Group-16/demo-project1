@@ -101,7 +101,9 @@ exports.getServicesForCounter = (counterId) => {
     const sql = "SELECT * FROM counters WHERE id=?";
     db.get(sql, [counterId], (err, row) => {
       if(err) { reject(err); }
-      else {
+      else if (row == null){
+        resolve({error: 'services not found'})
+      } else {
         resolve(row.services.split(','));
       }
     });
