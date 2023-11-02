@@ -71,7 +71,7 @@ We planned to leave for testing and documentation purposes the hours we had left
 ## ASSESSMENT
 
 - Q: What caused your errors in estimation (if any)? 
-  - A: Lack of experience with planning, time estimation and task splitting. Also, the lack of communication in the process of assigning tasks
+  - A: Lack of experience with planning, time estimation and task splitting.
 
 - Q: What lessons did you learn (both positive and negative) in this sprint?
   - A: 
