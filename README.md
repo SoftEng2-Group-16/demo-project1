@@ -20,6 +20,7 @@ The following material references should contains all the instrections to instal
 Insert here any links to your old projects that can be usefull to the current project:
 
 - https://github.com/lfmvit/web-application-airplanes
+- https://github.com/aTorredimare/Categories
 
 ### To build and run the project:
 
